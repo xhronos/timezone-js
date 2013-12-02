@@ -939,8 +939,7 @@
           arr = l.split(/\s+/);
           chunk = arr.shift();
           //Ignore Leap.
-          switch (chunk) {
-            case 'Zone':
+          if (chunk === 'Zone'){
               zone = arr.shift();
               if (!_this.zones[zone]) {
                 _this.zones[zone] = [];
@@ -951,8 +950,7 @@
               if (arr[3]) arr[3] = Date.UTC.apply(null, arr[3]);
               arr[0] = -getBasicOffset(arr[0]);
               _this.zones[zone].push(arr);
-              break;
-            case 'Rule':
+          }else if (chunk === 'Rule'){
               rule = arr.shift();
               if (!_this.rules[rule]) {
                 _this.rules[rule] = [];
@@ -965,15 +963,12 @@
               //Parse offset SAVE
               arr[6] = getBasicOffset(arr[6]);
               _this.rules[rule].push(arr);
-              break;
-            case 'Link':
-              //No zones for these should already exist.
+          }else if (chunk === 'Link'){
               if (_this.zones[arr[1]]) {
-                throw new Error('Error with Link ' + arr[1] + '. Cannot create link of a preexisted zone.');
-              }
-              //Create the link.
-              _this.zones[arr[1]] = arr[0];
-              break;
+                  throw new Error('Error with Link ' + arr[1] + '. Cannot create link of a preexisted zone.');
+                }
+                //Create the link.
+                _this.zones[arr[1]] = arr[0];
           }
         }
       }
